@@ -21,5 +21,4 @@ For the post and update APIs, the response is recieved by defining "response" as
 
 For the get API, the response can be received by rendering the template of the frontend page you would like to displaay the data on and passing render_template the response.
 The main program must have render_template imported from flask
-* Example: response = requests.get('http://127.0.0.1:5000/get-visits')
-         *return render_template('index.html', response=response)
+* Example: response = requests.get('http://127.0.0.1:5000/get-visits'), return render_template('index.html', response=response)
