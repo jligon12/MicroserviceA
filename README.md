@@ -18,8 +18,9 @@ The response for the post and update APIs is a successful (201) or unsuccesful (
 The response for the get API is the requested data.
 For the post and update APIs, the response is recieved by defining "response" as the request and checking the status code
 * Example: response = requests.post('http://127.0.0.1:5000/add-visit', json=data)
-          if response.status_code == 201:
-             return response.json()
+*           if response.status_code == 201:
+*                     response.json()
+
 For the get API, the response can be received by rendering the template of the frontend page you would like to displaay the data on and passing render_template the response.
 The main program must have render_template imported from flask
 * Example: response = requests.get('http://127.0.0.1:5000/get-visits')
