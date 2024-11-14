@@ -1,6 +1,6 @@
 College Visit Microservice
 
-This microservice is an API with get, post, and update functionality. It is hosted on port 5000.
+This microservice is an API with get, post, and update functionality. It is hosted on port 5000. The main program can access the API through a different port number.
 The API is to a MongoDB database where college visits are tracked.
 * Get data = http://127.0.0.1:5000/get-visits
 * Post data = http://127.0.0.1:5000/add-visit
