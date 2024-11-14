@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 import pymongo
 
@@ -12,9 +12,17 @@ db = client.get_database("MicroserviceA")
 #Collection
 CollegeVisits = db.CollegeVisits
 
-# This guide uses GET here instead of POST? https://www.geeksforgeeks.org/make-python-api-to-access-mongo-atlas-database/
-@app.route('/insert-one/<email>/<name>/<location>/<visitDate>/<contacts>/<rating>/<notes>/', methods=['GET'])
-def addCollegeVisit(email, name, location, visitDate, contacts, rating, notes):
+@app.route('/add-visit', methods=['POST'])
+def addVisit():
+    visitData = request.get_json()
+    email = visitData.get('email')
+    name = visitData.get('name')
+    location = visitData.get('location')
+    visitDate = visitData.get('visitDate')
+    contacts = visitData.get('contacts')
+    rating = visitData.get('rating')
+    notes = visitData.get('notes')
+
     visit = {
         'Email': email,
         'Name': name,
@@ -24,10 +32,11 @@ def addCollegeVisit(email, name, location, visitDate, contacts, rating, notes):
         'Rating': rating,
         'Notes': notes
     }
-    addedVisit = CollegeVisits.insert_one(visit)
-    return "201, POST Request Successful" #is there where I would write the status code?
 
-@app.route('/find/', methods = ['GET'])
+    CollegeVisits.insert_one(visit)
+    return jsonify({'Status Code 201:' 'POST request successful'})
+
+@app.route('/get-visits', methods = ['GET'])
 def getVisits():
     allVisits = CollegeVisits.find()
     output = {}
@@ -38,15 +47,30 @@ def getVisits():
         i += 1
     return "200, GET Request Successful "
 
-@app.route('/update/<key>/<value>/<element>/<updateValue>/', methods = ['GET'])
-def update(key, value, element, updateValue):
+@app.route('/update-visit', methods = ['PUT'])
+def updateVisit():
+    visitUpdateData = request.get_json() #{"key": "Name", "value": "Hogwarts", "element": "Contacts", "updateValue": "HarryPotter,HermioneGranger"}
+    key = visitUpdateData.get('key')
+    value = visitUpdateData.get('value')
     visit = {key: value}
+    element = visitUpdateData.get('element')
+    updateValue = visitUpdateData.get('updateValue')
     updateElement = {element: updateValue}
     updateVisit = CollegeVisits.update_one(visit, {'$set': updateElement})
     if updateVisit.acknowledged:
-        return "201, Update Successful"
+        return jsonify({"201, Update Successful"})
     else:
-        return "Update Unsuccessful"
+        return jsonify({"Update Unsuccessful"})
+
+# @app.route('/update/<key>/<value>/<element>/<updateValue>/', methods = ['GET'])
+# def update(key, value, element, updateValue):
+#     visit = {key: value}
+#     updateElement = {element: updateValue}
+#     updateVisit = CollegeVisits.update_one(visit, {'$set': updateElement})
+#     if updateVisit.acknowledged:
+#         return "201, Update Successful"
+#     else:
+#         return "Update Unsuccessful"
 
 if __name__ == "__main__":
     app.run(debug=True)
