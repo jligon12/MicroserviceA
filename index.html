@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="content"></div>
+    <h1>Visits</h1>
+    <table>
+        <tr>
+            <th>Visits</th>
+        </tr>
+        {% for response in response %}
+            <tr>
+                <td>{{response}}</td>
+            </tr>
+        <!-- {% endfor %} -->
+    </table>
+    <br>
+    <br>
+    <br>
+    <br>
+
+    <div class="content"></div>
+    <form action="/add-visit" method="POST">
+        <label for="email">Email:</label><br>
+        <input type="text" name="email" id="email"><br>
+        <label for="name">College Name:</label><br>
+        <input type="text" name="name" id="name"><br>
+        <label for="location">Location:</label><br>
+        <input type="text" name="location" id="location"><br>
+        <label for="visitDate">Visit Date:</label><br>
+        <input type="text" name="visitDate" id="visitDate"><br>
+        <label for="contacts">Contacts:</label><br>
+        <input type="text" name="contacts" id="contacts"><br>
+        <label for="rating">Rating:</label><br>
+        <input type="text" name="rating" id="rating"><br>
+        <label for="notes">Notes:</label><br>
+        <input type="text" name="notes" id="notes"><br>
+        <input type="submit" value="Add Visit">
+    </form>
+
+    <div class="content"></div>
+    <form action="/update-visit" method="POST">
+        <label for="key">Key:</label><br>
+        <input type="text" name="key" id="key"><br>
+        <label for="value">Key Value:</label><br>
+        <input type="text" name="value" id="value"><br>
+        <label for="element">What would you like to update?:</label><br>
+        <input type="text" name="element" id="element"><br>
+        <label for="updateValue">Updated Value:</label><br>
+        <input type="text" name="updateValue" id="updateValue"><br>
+        <input type="submit" value="Update Visit">
+    </form>
+
+</div>
+</body>
+</html>
