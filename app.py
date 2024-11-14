@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 import pymongo
 
+
 #MongoDB connection 
 connection_url = 'mongodb+srv://ligonj:MicroA@microservicea.ublsl.mongodb.net/'
 app = Flask(__name__)
@@ -34,7 +35,7 @@ def addVisit():
     }
 
     CollegeVisits.insert_one(visit)
-    return jsonify({'Status Code 201:' 'POST request successful'})
+    return jsonify({'message': f'Visit added successfully.'}), 201
 
 @app.route('/get-visits', methods = ['GET'])
 def getVisits():
@@ -45,32 +46,19 @@ def getVisits():
         output[i] = visit
         output[i].pop('_id')
         i += 1
-    return "200, GET Request Successful "
+    return output #"200, GET Request Successful "
 
-@app.route('/update-visit', methods = ['PUT'])
+@app.route('/update-visit', methods = ['POST'])
 def updateVisit():
     visitUpdateData = request.get_json() #{"key": "Name", "value": "Hogwarts", "element": "Contacts", "updateValue": "HarryPotter,HermioneGranger"}
     key = visitUpdateData.get('key')
     value = visitUpdateData.get('value')
-    visit = {key: value}
     element = visitUpdateData.get('element')
     updateValue = visitUpdateData.get('updateValue')
+    visit = {key: value}
     updateElement = {element: updateValue}
-    updateVisit = CollegeVisits.update_one(visit, {'$set': updateElement})
-    if updateVisit.acknowledged:
-        return jsonify({"201, Update Successful"})
-    else:
-        return jsonify({"Update Unsuccessful"})
-
-# @app.route('/update/<key>/<value>/<element>/<updateValue>/', methods = ['GET'])
-# def update(key, value, element, updateValue):
-#     visit = {key: value}
-#     updateElement = {element: updateValue}
-#     updateVisit = CollegeVisits.update_one(visit, {'$set': updateElement})
-#     if updateVisit.acknowledged:
-#         return "201, Update Successful"
-#     else:
-#         return "Update Unsuccessful"
+    CollegeVisits.update_one(visit, {'$set': updateElement})
+    return jsonify({'message': f'Visit updated successfully.'}), 201
 
 if __name__ == "__main__":
     app.run(debug=True)
