@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, request
-from flask_cors import CORS
 import pymongo
+import json
 
 
 #MongoDB connection 
@@ -39,14 +39,24 @@ def addVisit():
 
 @app.route('/get-visits', methods = ['GET'])
 def getVisits():
-    allVisits = CollegeVisits.find()
-    output = {}
-    i = 0
-    for visit in allVisits:
-        output[i] = visit
-        output[i].pop('_id')
-        i += 1
-    return output #"200, GET Request Successful "
+    data = request.get_json()
+    email = data.get('Email')
+    applications = CollegeVisits.find({'Email': email})
+
+    documents = list(applications)
+
+    json_string = json.dumps(documents, default=json_util.default)
+
+    print(json_string)
+    return json_string, 200
+    # allVisits = CollegeVisits.find()
+    # output = {}
+    # i = 0
+    # for visit in allVisits:
+    #     output[i] = visit
+    #     output[i].pop('_id')
+    #     i += 1
+    # return output 
 
 @app.route('/update-visit', methods = ['POST'])
 def updateVisit():
@@ -61,4 +71,4 @@ def updateVisit():
     return jsonify({'message': f'Visit updated successfully.'}), 201
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(port=9010, debug=True)
