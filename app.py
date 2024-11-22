@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
 import pymongo
 import json
+import json_util
 
 
 #MongoDB connection 
@@ -41,9 +42,9 @@ def addVisit():
 def getVisits():
     data = request.get_json()
     email = data.get('Email')
-    applications = CollegeVisits.find({'Email': email})
+    visits = CollegeVisits.find({'Email': email})
 
-    documents = list(applications)
+    documents = list(visits)
 
     json_string = json.dumps(documents, default=json_util.default)
 
